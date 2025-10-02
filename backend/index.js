@@ -4,11 +4,13 @@ import { fileURLToPath } from "url";
 import dotev from "dotenv";
 import db, { connectDB } from "./src/config/db";
 
-// import homeRoute from "./src/routes/home.js"; // Home route
+// Importing routes
+import homeRoute from "./src/routes/home.js";
 
-// Path
+// Initializng Path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const frontEndPath = path.join(__dirname, "..", "frontend");
 
 // Env variables
 dotev.config();
@@ -17,16 +19,10 @@ dotev.config();
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
 
-// Connecting DB
-await connectDB();
-
-// Setting views
-//app.set("views", path.join(__dirname, "src/views"));
-//app.set("view engine", "ejs");
-
 // Static Files
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(frontEndPath));
 app.use(express.urlencoded({ extended: true }));
+// Parse incoming json req
 app.use(express.json());
 
 //Routes
@@ -36,3 +32,5 @@ app.use(express.json());
 app.listen(PORT, () => {
   console.log("Server runnig on port: " + PORT);
 });
+
+export { frontEndPath };

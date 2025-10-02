@@ -8,6 +8,7 @@ CREATE TABLE
 CREATE TABLE
     notes (
         id SERIAL PRIMARY KEY,
+        title TEXT,
         note TEXT,
         user_id INT NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users (id)

@@ -1,7 +1,8 @@
 import db, { connectDB } from "../config/db";
+import { frontEndPath } from "../..";
 
 const indexPage = async (req, res) => {
-  res.json();
+  res.sendFile();
 };
 
 export default indexPage;

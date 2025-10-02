@@ -1,4 +1,4 @@
-import pg from "pg";
+import { Pool } from "pg";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -9,21 +9,12 @@ const DB_HOST = process.env.DB_HOST || "localhost";
 const DB_PORT = process.env.DB_PORT || 5432;
 const DB_NAME = process.env.DB_NAME || "note";
 
-const db = new pg.Client({
+const pool = new Pool({
   user: DB_USER,
-  host: DB_HOST,
-  database: DB_NAME,
   password: DB_PASS,
+  host: DB_HOST,
   port: DB_PORT,
+  database: DB_NAME,
 });
 
-async function connectDB() {
-  try {
-    await db.connect();
-  } catch (error) {
-    console.error("DB connection is failed: ", error.message);
-  }
-}
-
-export default db;
-export { connectDB };
+export default pool;

@@ -1,11 +1,11 @@
-import pool from "../config/db";
+import pool from "../config/db.js";
 
 async function findUserByEmail(email) {
   try {
     const result = pool.query("SELECT * FROM users WHERE email = $1", [email]);
     return (await result).rows[0];
   } catch (error) {
-    console.error("Error Creating user: ", error);
+    console.error("Error looking for user: ", error);
     return null;
   }
 }
@@ -18,7 +18,7 @@ async function createUser(email, password) {
     );
     return (await result).rows[0];
   } catch (error) {
-    console.error("Error Creating user: ", error);
+    console.error("Error creating user: ", error);
     return null;
   }
 }
@@ -31,7 +31,9 @@ async function createGoogleUser(email) {
     );
     return (await result).rows[0];
   } catch (error) {
-    console.error("Error Creating user: ", error);
+    console.error("Error creating user with google: ", error);
     return null;
   }
 }
+
+export { findUserByEmail, createGoogleUser, createUser };

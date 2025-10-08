@@ -1,4 +1,4 @@
-import pool from "../config/db";
+import pool from "../config/db.js";
 
 async function createNote(userId, title, note) {
   try {
@@ -14,11 +14,9 @@ async function createNote(userId, title, note) {
   }
 }
 
-async function getAllNotes(userId) {
+async function getAllNotes(email) {
   try {
-    const result = pool.query("SELECT * FROM notes WHERE user_id = $1", [
-      userId,
-    ]);
+    const result = pool.query("SELECT * FROM notes WHERE email = $1", [email]);
     return (await result).rows;
   } catch (error) {
     console.error("Error retrieving all notes: ", error);

@@ -2,15 +2,12 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotev from "dotenv";
-import db, { connectDB } from "./src/config/db";
-
-// Importing routes
-import homeRoute from "./src/routes/home.js";
+import passport from "passport";
+import session from "express-session";
 
 // Initializng Path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const frontEndPath = path.join(__dirname, "..", "frontend");
 
 // Env variables
 dotev.config();
@@ -19,18 +16,22 @@ dotev.config();
 const app = express();
 const PORT = process.env.APP_PORT || 3000;
 
-// Static Files
-app.use(express.static(frontEndPath));
-app.use(express.urlencoded({ extended: true }));
-// Parse incoming json req
-app.use(express.json());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
-//Routes
-//app.use("/", homeRoute);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Static Files
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Running the app
 app.listen(PORT, () => {
   console.log("Server runnig on port: " + PORT);
 });
-
-export { frontEndPath };

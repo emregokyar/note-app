@@ -1,7 +1,7 @@
 import express from "express";
-import indexPage from "../controllers/homeController";
+import { allNotes } from "../controllers/homeController.js";
 
 const router = express.Router();
-router.get("/", indexPage);
+router.get("/notes", allNotes);
 
 export default router;

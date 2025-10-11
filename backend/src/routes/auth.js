@@ -1,8 +1,9 @@
 import express from "express";
+import passport from "passport";
 import {
+  localLogin,
   logout,
   loginWithGoogle,
-  loginWithLocal,
   createAccount,
   loginRequest,
 } from "../controllers/authController.js";
@@ -12,6 +13,6 @@ router.post("/register", createAccount);
 router.get("/logout", logout);
 router.get("/auth/google", loginRequest);
 router.get("/auth/google/home", loginWithGoogle);
-router.get("/login", loginWithLocal);
+router.post("/login", localLogin);
 
 export default router;

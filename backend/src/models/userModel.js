@@ -3,7 +3,11 @@ import pool from "../config/db.js";
 async function findUserByEmail(email) {
   try {
     const result = pool.query("SELECT * FROM users WHERE email = $1", [email]);
-    return (await result).rows[0];
+    if ((await result).rows.length > 0) {
+      return (await result).rows[0];
+    } else {
+      return null;
+    }
   } catch (error) {
     console.error("Error looking for user: ", error);
     return null;
@@ -16,7 +20,11 @@ async function createUser(email, password) {
       "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
       [email, password]
     );
-    return (await result).rows[0];
+    if ((await result).rows.length > 0) {
+      return (await result).rows[0];
+    } else {
+      return null;
+    }
   } catch (error) {
     console.error("Error creating user: ", error);
     return null;
@@ -29,7 +37,11 @@ async function createGoogleUser(email) {
       "INSERT INTO users(email, password) VALUES($1, $2) RETURNING *",
       [email, "google"]
     );
-    return (await result).rows[0];
+    if ((await result).rows.length > 0) {
+      return (await result).rows[0];
+    } else {
+      return null;
+    }
   } catch (error) {
     console.error("Error creating user with google: ", error);
     return null;

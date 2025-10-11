@@ -1,5 +1,6 @@
 import passport from "passport";
 import { findUserByEmail, createUser } from "../models/userModel.js";
+import bcrypt from "bcrypt";
 
 const SALT_ROUNDS = 10;
 
@@ -10,8 +11,9 @@ async function createAccount(req, res) {
 
   try {
     const userResult = await findUserByEmail(email);
+
     if (userResult !== null) {
-      req.json({
+      res.json({
         message: "This account is already registered.",
       });
     } else {
@@ -34,26 +36,63 @@ async function createAccount(req, res) {
 }
 
 // Initial login request with google
-async function loginRequest() {
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  });
+function loginRequest(req, res, next) {
+  passport.authenticate("google", { scope: ["profile", "email"] })(
+    req,
+    res,
+    next
+  );
 }
 
-// Local login strategy after success
-async function loginWithLocal() {
-  passport.authenticate("local", {
-    successRedirect: "/home",
-    failureRedirect: "/",
-  });
+// Login with google
+function loginWithGoogle(req, res, next) {
+  passport.authenticate("google", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Server error during login." });
+    }
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found or invalid credentials." });
+    }
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Login failed." });
+      }
+      return res.status(200).json({
+        message: "Login successful!",
+        username: user.email,
+      });
+    });
+  })(req, res, next);
 }
 
-// Google login strategy
-async function loginWithGoogle() {
-  passport.authenticate("google", {
-    successRedirect: "/home",
-    failureRedirect: "/",
-  });
+// Locally login
+function localLogin(req, res, next) {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Server error during login." });
+    }
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found or invalid credentials." });
+    }
+
+    // Logining the users
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Login failed." });
+      }
+      return res.status(200).json({
+        message: "Login successful!",
+        username: user.email,
+      });
+    });
+  })(req, res, next);
 }
 
 // Logout
@@ -62,8 +101,11 @@ async function logout(req, res) {
     if (err) {
       return next(err);
     }
-    res.redirect("/");
+    res.status(200).json({
+      success: true,
+      url: "/",
+    });
   });
 }
 
-export { logout, loginWithGoogle, loginWithLocal, createAccount, loginRequest };
+export { localLogin, logout, loginWithGoogle, createAccount, loginRequest };

@@ -1,10 +1,11 @@
 import passport from "passport";
-import env from "dotenv";
+import dotenv from "dotenv";
 import GoogleStrategy from "passport-google-oauth2";
 import { Strategy } from "passport-local";
 import { createGoogleUser, findUserByEmail } from "../models/userModel.js";
+import bcrypt from "bcrypt";
 
-env.config();
+dotenv.config();
 const APP_PORT = process.env.APP_PORT || 3000;
 
 //Google strategy to authenticate users
@@ -23,7 +24,7 @@ passport.use(
         const result = await findUserByEmail(profile.email);
         if (result === null) {
           const newUser = await createGoogleUser(profile.email);
-          return cb(null, (await newUser).rows[0]);
+          return cb(null, await newUser);
         } else {
           return cb(null, result);
         }

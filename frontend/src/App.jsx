@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./css/styles.css";
+import React from "react";
+import LoginForm from "./components/LoginForm";
+import SignUpForm from "./components/SignUpForm";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [type, setType] = React.useState("login");
+  const handleClick = (text) => {
+    if (text !== type) {
+      setType(text);
+      return;
+    }
+  };
+  const containerClass =
+    "container " + (type === "signUp" ? "right-panel-active" : "");
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="app">
+        <div className={containerClass} id="container">
+          <LoginForm />
+          <SignUpForm />
+          <div className="overlay-container">
+            <div className="overlay">
+              <div className="overlay-panel overlay-left">
+                <h1>Hello, There!</h1>
+                <p> Create account to start with or login your account.</p>
+                <button
+                  className="ghost"
+                  onClick={() => {
+                    handleClick("login");
+                  }}
+                >
+                  SIGN IN
+                </button>
+              </div>
+
+              <div className="overlay-panel overlay-right">
+                <h1>Welcome Back!</h1>
+                <p>
+                  {" "}
+                  Enter details to login your account or sing up a new account.
+                </p>
+                <button
+                  className="ghost"
+                  onClick={() => {
+                    handleClick("signUp");
+                  }}
+                >
+                  SIGN UP
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

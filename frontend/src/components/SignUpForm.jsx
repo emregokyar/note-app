@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/styles.css";
+import "../styles/styles.css";
 import SocialContainer from "./SocialContainer";
 
 function SignUpForm(props) {

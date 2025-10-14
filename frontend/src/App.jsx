@@ -1,59 +1,19 @@
-import "./css/styles.css";
 import React from "react";
-import LoginForm from "./components/LoginForm";
-import SignUpForm from "./components/SignUpForm";
+import Index from "./pages/Index";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  const [type, setType] = React.useState("login");
-  const handleClick = (text) => {
-    if (text !== type) {
-      setType(text);
-      return;
-    }
-  };
-  const containerClass =
-    "container " + (type === "signUp" ? "right-panel-active" : "");
-
   return (
     <>
-      <div className="app">
-        <div className={containerClass} id="container">
-          <LoginForm />
-          <SignUpForm />
-          <div className="overlay-container">
-            <div className="overlay">
-              <div className="overlay-panel overlay-left">
-                <h1>Hello, There!</h1>
-                <p> Create account to start with or login your account.</p>
-                <button
-                  className="ghost"
-                  onClick={() => {
-                    handleClick("login");
-                  }}
-                >
-                  SIGN IN
-                </button>
-              </div>
-
-              <div className="overlay-panel overlay-right">
-                <h1>Welcome Back!</h1>
-                <p>
-                  {" "}
-                  Enter details to login your account or sing up a new account.
-                </p>
-                <button
-                  className="ghost"
-                  onClick={() => {
-                    handleClick("signUp");
-                  }}
-                >
-                  SIGN UP
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Router>
     </>
   );
 }

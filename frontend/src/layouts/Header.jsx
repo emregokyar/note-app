@@ -1,4 +1,5 @@
 import React from "react";
+import NoteModel from "../components/NoteModal";
 
 function Header(props) {
   return (
@@ -8,7 +9,10 @@ function Header(props) {
           <ul className="nav nav-pills">
             <li className="nav-item">
               <a
-                className="nav-link active btn btn-dark"
+                data-bs-toggle="modal"
+                data-bs-target="#noteModel"
+                type="button"
+                className="nav-link active btn btn-dark rounded-4"
                 ariaCurrent="page"
                 style={{
                   border: "1px solid #8b615b",
@@ -25,6 +29,8 @@ function Header(props) {
               </a>
             </li>
           </ul>
+
+          <NoteModel id="noteModel" name="NEW NOTE" />
         </header>
       </div>
     </>

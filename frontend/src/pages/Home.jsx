@@ -4,7 +4,11 @@ import Footer from "../layouts/Footer";
 import Note from "../layouts/Note";
 import NoteHeading from "../components/NoteHeading";
 
+import { useNoteContext } from "../context/NoteContext";
+
 function Home() {
+  const { notes } = useNoteContext();
+
   return (
     <>
       <Header />
@@ -19,6 +23,9 @@ function Home() {
           }}
         >
           <ul className="list-none m-0 p-0">
+            {notes.map((note) => {
+              <NoteHeading key={note.id} heading={note.heading} />;
+            })}
             <NoteHeading heading="Note Heading 1" />
             <NoteHeading heading="Note Heading 2" />
           </ul>

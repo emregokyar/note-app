@@ -14,6 +14,20 @@ async function findUserByEmail(email) {
   }
 }
 
+async function findUserById(id) {
+  try {
+    const result = pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    if ((await result).rows.length > 0) {
+      return (await result).rows[0];
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error while looking for user: ", error);
+    return null;
+  }
+}
+
 async function createUser(email, password) {
   try {
     const result = pool.query(
@@ -48,4 +62,4 @@ async function createGoogleUser(email) {
   }
 }
 
-export { findUserByEmail, createGoogleUser, createUser };
+export { findUserByEmail, createGoogleUser, createUser, findUserById };

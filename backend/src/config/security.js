@@ -64,6 +64,9 @@ passport.use(
   })
 );
 
+/*
+// SESSION BASED COOKIE SAVING
+
 // Saving the cookie
 passport.serializeUser((user, cb) => {
   cb(null, user);
@@ -73,3 +76,4 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((user, cb) => {
   cb(null, user);
 });
+*/

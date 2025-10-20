@@ -31,6 +31,20 @@ async function getAllNotes(email) {
   }
 }
 
+async function getNoteById(id) {
+  try {
+    const result = pool.query("SELECT * FROM notes WHERE id = $1", [id]);
+    const note = (await result).rows;
+    if (note) {
+      return note[0];
+    }
+    return null;
+  } catch (error) {
+    console.error("Error retrieving selected note: ", error);
+    return null;
+  }
+}
+
 async function deleteNote(noteId) {
   try {
     pool.query("DELETE FROM notes WHERE id = $1", [noteId]);
@@ -87,4 +101,5 @@ export {
   updateNote,
   updateNoteContent,
   updateNoteTitle,
+  getNoteById,
 };

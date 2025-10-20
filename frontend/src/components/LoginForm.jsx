@@ -1,11 +1,15 @@
 import React from "react";
 import SocialContainer from "./SocialContainer";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm(props) {
   const [state, setState] = React.useState({
     username: "",
     password: "",
   });
+  const authentication = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -16,10 +20,18 @@ function LoginForm(props) {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const { username, password } = state;
-    alert("Logging in with " + username + " password: " + password);
+    try {
+      const data = await authentication.loginLocally(state);
+      if (data) {
+        navigate("/home");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {}
+
     setState({
       username: "",
       password: "",
@@ -37,7 +49,7 @@ function LoginForm(props) {
       <SocialContainer />
       <span>or use your account</span>
       <input
-        type="email"
+        type="text"
         placeholder="Email"
         value={state.username}
         name="username"

@@ -1,12 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNoteContext } from "../context/NoteContext";
 
 function NoteModel(props) {
+  const noteContext = useNoteContext();
+
+  const [inputs, setInput] = useState({ title: "", content: "" });
+  function handleChange(event) {
+    const value = event.target.value;
+    setInput({
+      ...inputs,
+      [event.target.name]: value,
+    });
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const { title, content } = inputs;
+    try {
+      if (props.noteId) {
+        await noteContext.update(inputs, props.noteId);
+        document.getElementById(closeButton).click();
+      } else {
+        await noteContext.add(inputs);
+      }
+    } catch (error) {
+      console.log("Something went wrong while fetching info note.");
+    }
+  }
+
   return (
     <>
       <div
         className="modal fade"
         id={props.id}
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="modalLabel"
         aria-hidden="true"
       >
@@ -24,15 +51,16 @@ function NoteModel(props) {
               ></button>
             </div>
 
-            <form action="/" method="post">
+            <form action="/newNote" onSubmit={handleSubmit} method="post">
               <div className="modal-body">
                 <label htmlFor="heading">Heading</label>
                 <input
                   className="rounded-3"
                   type="text"
-                  name="heading"
+                  name="title"
                   id="heading"
                   value={props.heading}
+                  onChange={handleChange}
                 />
                 <label htmlFor="content">Content</label>
                 <input
@@ -41,6 +69,7 @@ function NoteModel(props) {
                   name="content"
                   id="content"
                   value={props.content}
+                  onChange={handleChange}
                 />
               </div>
               <div className="modal-footer">
@@ -48,6 +77,7 @@ function NoteModel(props) {
                   type="button"
                   data-bs-dismiss="modal"
                   style={{ backgroundColor: "white", color: "#8b615b" }}
+                  id="closeButton"
                 >
                   Close
                 </button>

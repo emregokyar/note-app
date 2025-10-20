@@ -11,18 +11,23 @@ const NoteContext = createContext();
 const NoteProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
 
-  //Retrieving all the notes right away
+  //Retrieving all the notes when user load the page
   useEffect(() => {
-    getAllNotes().then(setNotes).catch(console.error);
+    getAllNotes()
+      .then((data) => {
+        setNotes(Array.isArray(data) ? data : data.notes || []);
+      })
+      .catch(console.error);
   }, []);
 
-  const add = (note) => {
-    const newNote = createNote(note);
-    setNotes([...notes, newNote]);
+  const add = async (note) => {
+    const newNote = await createNote(note);
+    setNotes([...notes, newNote.note]);
   };
+  const update = async (note, id) => {
+    const updatedNote = await updateNote(note, id);
+    console.log(updatedNote);
 
-  const update = (note, id) => {
-    const updatedNote = updateNote(note, id);
     setNotes(notes.map((note) => (note.id === id ? updatedNote : note)));
   };
 
@@ -38,5 +43,5 @@ const NoteProvider = ({ children }) => {
   );
 };
 
-const useNoteContext = () => useContext(NoteContext);
-export { NoteProvider, useNoteContext };
+export const useNoteContext = () => useContext(NoteContext);
+export default NoteProvider;

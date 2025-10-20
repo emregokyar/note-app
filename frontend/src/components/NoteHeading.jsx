@@ -4,6 +4,8 @@ function NoteHeading(props) {
   return (
     <>
       <li
+        key={props.id}
+        onClick={props.onClick}
         className="border-bottom "
         style={{
           listStyleType: "none",

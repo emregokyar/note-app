@@ -4,7 +4,7 @@ import NoteModel from "../components/NoteModal";
 function Header(props) {
   return (
     <>
-      <div className="container col-12" bisSkinChecked="1">
+      <div className="container col-12" bis-skin-checked="1">
         <header className="d-flex justify-content-center py-3">
           <ul className="nav nav-pills">
             <li className="nav-item">
@@ -13,7 +13,7 @@ function Header(props) {
                 data-bs-target="#noteModel"
                 type="button"
                 className="nav-link active btn btn-dark rounded-4"
-                ariaCurrent="page"
+                aria-current="page"
                 style={{
                   border: "1px solid #8b615b",
                   backgroundColor: "#8b615b",

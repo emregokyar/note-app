@@ -140,7 +140,7 @@ function localLogin(req, res, next) {
 
     // Sending JWT token to user
     return res.status(200).json({
-      message: "Login Successful",
+      success: true,
       token: token,
     });
   })(req, res, next);

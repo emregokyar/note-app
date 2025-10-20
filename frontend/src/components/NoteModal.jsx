@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNoteContext } from "../context/NoteContext";
 
 function NoteModel(props) {
   const noteContext = useNoteContext();
 
-  const [inputs, setInput] = useState({ title: "", content: "" });
+  const [inputs, setInput] = useState({
+    title: props.heading || "",
+    content: props.content || "",
+  });
+
+  useEffect(() => {
+    setInput({
+      title: props.heading || "",
+      content: props.content || "",
+    });
+  }, [props.heading, props.content]);
+
   function handleChange(event) {
     const value = event.target.value;
     setInput({
@@ -19,13 +30,22 @@ function NoteModel(props) {
     try {
       if (props.noteId) {
         await noteContext.update(inputs, props.noteId);
-        document.getElementById(closeButton).click();
+        props.passedAction(props.noteId, inputs.title, inputs.content);
       } else {
         await noteContext.add(inputs);
+        setInput({ title: "", content: "" });
       }
+
+      const modalElement = document.getElementById(props.id);
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal.hide();
     } catch (error) {
-      console.log("Something went wrong while fetching info note.");
+      console.log("Something went wrong while fetching note info.");
     }
+  }
+
+  function cancelClick() {
+    setInput({ title: "", content: "" });
   }
 
   return (
@@ -59,7 +79,7 @@ function NoteModel(props) {
                   type="text"
                   name="title"
                   id="heading"
-                  value={props.heading}
+                  value={inputs.title}
                   onChange={handleChange}
                 />
                 <label htmlFor="content">Content</label>
@@ -68,7 +88,7 @@ function NoteModel(props) {
                   type="text"
                   name="content"
                   id="content"
-                  value={props.content}
+                  value={inputs.content}
                   onChange={handleChange}
                 />
               </div>
@@ -78,6 +98,7 @@ function NoteModel(props) {
                   data-bs-dismiss="modal"
                   style={{ backgroundColor: "white", color: "#8b615b" }}
                   id="closeButton"
+                  onClick={cancelClick}
                 >
                   Close
                 </button>

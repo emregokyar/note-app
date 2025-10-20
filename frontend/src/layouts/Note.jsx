@@ -1,7 +1,22 @@
 import React from "react";
 import NoteModel from "../components/NoteModal";
+import { useState } from "react";
 
 function Note(props) {
+  const [noteInfo, setNoteInfo] = useState({
+    noteId: props.id || 0,
+    heading: props.title || "",
+    content: props.content || "",
+  });
+
+  function handleClick() {
+    setNoteInfo({
+      noteId: props.id || 0,
+      heading: props.title || "",
+      content: props.content || "",
+    });
+  }
+
   return (
     <>
       <div
@@ -18,15 +33,17 @@ function Note(props) {
               data-bs-toggle="modal"
               data-bs-target="#edit"
               className="mx-2"
+              onClick={handleClick}
             >
               EDIT
             </button>
             <NoteModel
               id="edit"
               name="EDIT"
-              noteId={props.id}
-              heading={props.title}
-              content={props.content}
+              noteId={noteInfo.noteId}
+              heading={noteInfo.heading}
+              content={noteInfo.content}
+              passedAction={props.updateInfo}
             />
 
             <button

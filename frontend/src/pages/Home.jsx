@@ -36,16 +36,26 @@ function Home() {
     });
   }
 
+  function setInfoAfterUpdate(id, tit, cont) {
+    setSelectedNote({
+      id: id,
+      title: tit,
+      content: cont,
+    });
+  }
+
   return (
     <>
       <Header />
       <div className="box d-flex">
         <div className="col-6">
           <Note
+            key={selectedNote.id}
             id={selectedNote.id}
             title={selectedNote.title}
             content={selectedNote.content}
             delete={deleteNote}
+            updateInfo={setInfoAfterUpdate}
           />
         </div>
         <div

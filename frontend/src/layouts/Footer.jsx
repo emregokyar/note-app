@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useUser } from "../context/UserContext";
 
 function Footer(props) {
+  const userInfo = useUser();
+
   return (
     <>
       <div className="container" bis_skin_checked="1">
@@ -18,6 +21,9 @@ function Footer(props) {
             </li>
           </ul>
         </footer>
+        <div className="d-flex justify-content-center">
+          <h2>{userInfo.username}'s Notes</h2>
+        </div>
       </div>
     </>
   );

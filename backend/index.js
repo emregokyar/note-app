@@ -7,6 +7,7 @@ import session from "express-session";
 import "./src/config/security.js";
 import authRoutes from "./src/routes/auth.js";
 import homeRoutes from "./src/routes/home.js";
+import userRoute from "./src/routes/user.js";
 import cors from "cors";
 
 // Env variables
@@ -45,6 +46,7 @@ app.use(
 // Routes
 app.use("/", authRoutes);
 app.use("/", homeRoutes);
+app.use("/", userRoute);
 
 // Running the app
 app.listen(PORT, () => {

@@ -42,6 +42,10 @@ function SignUpForm() {
     });
   };
 
+  const googleLogin = () => {
+    window.location.href = `http://localhost:3000/auth/google`;
+  };
+
   return (
     <form
       action="/register"
@@ -50,7 +54,7 @@ function SignUpForm() {
       onSubmit={handleSubmit}
     >
       <h1>Create account</h1>
-      <SocialContainer />
+      <SocialContainer onClick={googleLogin} />
       <span>or use email for registration</span>
       <input
         type="email"

@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AuthProvider from "./context/AuthContext.jsx";
 import ProtectedRoute from "./context/ProtectedRoute";
 import NoteProvider from "./context/NoteContext.jsx";
+import { UserPorvider } from "./context/UserContext.jsx";
 
 function App() {
   return (
@@ -18,9 +19,11 @@ function App() {
               path="/home"
               element={
                 <ProtectedRoute>
-                  <NoteProvider>
-                    <Home />
-                  </NoteProvider>
+                  <UserPorvider>
+                    <NoteProvider>
+                      <Home />
+                    </NoteProvider>
+                  </UserPorvider>
                 </ProtectedRoute>
               }
             />
@@ -28,7 +31,9 @@ function App() {
               path="/about"
               element={
                 <ProtectedRoute>
-                  <About />
+                  <UserPorvider>
+                    <About />
+                  </UserPorvider>
                 </ProtectedRoute>
               }
             />

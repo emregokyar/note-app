@@ -6,9 +6,11 @@ import {
 } from "../services/noteService.js";
 
 import { createContext, useState, useContext, useEffect } from "react";
+import { useAuth } from "./authContext.jsx";
 
 const NoteContext = createContext();
 const NoteProvider = ({ children }) => {
+  const authentication = useAuth();
   const [notes, setNotes] = useState([]);
 
   //Retrieving all the notes when user load the page
@@ -18,6 +20,13 @@ const NoteProvider = ({ children }) => {
         setNotes(Array.isArray(data) ? data : data.notes || []);
       })
       .catch(console.error);
+
+    // Checking home route if there is a token authenticate the user
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("accessToken");
+    if (token) {
+      authentication.googleCallback();
+    }
   }, []);
 
   const add = async (note) => {

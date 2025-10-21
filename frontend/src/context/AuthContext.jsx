@@ -1,11 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import {
-  localLogin,
-  googleLoginReq,
-  googleLoginRes,
-  register,
-  logout,
-} from "../services/authService";
+import { localLogin, register, logout } from "../services/authService";
 
 // Creating auth context which is can be useable
 const AuthContext = createContext();
@@ -15,10 +9,19 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(
     localStorage.getItem("accessToken") || null
   );
-
   const loginLocally = async ({ username, password }) => {
     const data = await localLogin({ username, password });
 
+    if (data.success) {
+      setToken(data.token);
+      localStorage.setItem("accessToken", data.token);
+      return true;
+    }
+    return false;
+  };
+
+  const registerAccount = async ({ email, password }) => {
+    const data = await register({ email, password });
     if (data.success) {
       setToken(data.token);
       localStorage.setItem("accessToken", data.token);
@@ -35,9 +38,28 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // Checking if there is a token
+  function googleCallback() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("accessToken");
+
+    if (token) {
+      setToken(token);
+      localStorage.setItem("accessToken", token);
+    }
+  }
+
   // Making all those avalible for all child components
   return (
-    <AuthContext.Provider value={{ token, loginLocally, logoutFrontEnd }}>
+    <AuthContext.Provider
+      value={{
+        googleCallback,
+        token,
+        loginLocally,
+        logoutFrontEnd,
+        registerAccount,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

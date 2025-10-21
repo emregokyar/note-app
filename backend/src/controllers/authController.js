@@ -41,12 +41,14 @@ async function createAccount(req, res) {
           const token = jwt.sign(
             { id: user.id, email: user.email },
             JWT_SECRET,
-            { expiresIn: "1h" }
+            {
+              expiresIn: "1h",
+            }
           );
 
           // Sending JWT token to user
           return res.status(200).json({
-            message: "Login Successful",
+            success: true,
             token: token,
           });
         }
@@ -97,11 +99,16 @@ function loginWithGoogle(req, res, next) {
       expiresIn: "1h",
     });
 
+    /*
     // Sending JWT token to user
     return res.status(200).json({
-      message: "Login Successful",
+      success: true,
       token: token,
     });
+    */
+
+    res.redirect(`http://localhost:5173/home?accessToken=${token}`);
+    //localStorage.setItem("accessToken", token);
   })(req, res, next);
 }
 

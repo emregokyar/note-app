@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../styles/styles.css";
 import SocialContainer from "./SocialContainer";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
-function SignUpForm(props) {
+function SignUpForm() {
   const [state, setState] = React.useState({
-    username: "",
+    email: "",
     password: "",
   });
+
+  const authentication = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const value = event.target.value;
@@ -16,19 +21,30 @@ function SignUpForm(props) {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const { username, password } = state;
-    alert("Signin up with email and password: " + username, password);
+    const { email, password } = state;
+    try {
+      const data = await authentication.registerAccount(state);
+
+      if (data) {
+        navigate("/home");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log("Error creating accont: " + error);
+    }
+
     setState({
-      username: "",
+      email: "",
       password: "",
     });
   };
 
   return (
     <form
-      action="/"
+      action="/register"
       className="form-container sign-up-container"
       method="post"
       onSubmit={handleSubmit}
@@ -38,9 +54,9 @@ function SignUpForm(props) {
       <span>or use email for registration</span>
       <input
         type="email"
-        name="username"
+        name="email"
         placeholder="Email"
-        value={state.username}
+        value={state.email}
         onChange={handleChange}
       />
 

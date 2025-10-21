@@ -3,7 +3,7 @@ import SocialContainer from "./SocialContainer";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
 
-function LoginForm(props) {
+function LoginForm() {
   const [state, setState] = React.useState({
     username: "",
     password: "",
@@ -30,12 +30,18 @@ function LoginForm(props) {
       } else {
         navigate("/");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error fetching data: " + error);
+    }
 
     setState({
       username: "",
       password: "",
     });
+  };
+
+  const googleLogin = () => {
+    window.location.href = `http://localhost:3000/auth/google`;
   };
 
   return (
@@ -46,7 +52,7 @@ function LoginForm(props) {
       onSubmit={handleSubmit}
     >
       <h1>Sign in</h1>
-      <SocialContainer />
+      <SocialContainer onClick={googleLogin} />
       <span>or use your account</span>
       <input
         type="text"

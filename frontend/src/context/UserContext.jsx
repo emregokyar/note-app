@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import getUserInfo from "../services/userService";
+import getUserInfo from "../services/userService.js";
 
 const UserContext = createContext();
 const UserPorvider = ({ children }) => {

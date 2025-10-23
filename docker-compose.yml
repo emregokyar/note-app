@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:17.6
+    container_name: note-db
+    platform: linux/amd64
+    restart: always
+    env_file: 
+      - ./backend/.env
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: note
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backend/sql/note.sql:/docker-entrypoint-initdb.d/setup.sql
+    ports:
+      - "${DB_PORT}:5432"
+
+  backend:
+    build: ./backend
+    container_name: note-backend
+    restart: always
+    platform: linux/amd64
+    env_file: 
+      - ./backend/.env
+    environment:
+      APP_PORT: ${APP_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_PORT: ${DB_PORT}
+      DB_HOST: db
+      DB_NAME: note
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      - db
+    
+  frontend:
+      build: ./frontend
+      container_name: note-frontend
+      restart: always
+      platform: linux/amd64
+      env_file: 
+        - ./frontend/.env
+      environment:
+        HOST_URL: http://localhost:${APP_PORT}
+      ports:
+        - "5173:5173"
+      depends_on:
+        - backend
+
+volumes:
+  db_data:

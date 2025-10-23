@@ -6,7 +6,7 @@ import {
 } from "../services/noteService.js";
 
 import { createContext, useState, useContext, useEffect } from "react";
-import { useAuth } from "./authContext.jsx";
+import { useAuth } from "./AuthContext.jsx";
 
 const NoteContext = createContext();
 const NoteProvider = ({ children }) => {
